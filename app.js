@@ -1,5 +1,6 @@
 // todo 1. Разлочить корс, когда будет деплой с фронтом
 // todo 2. Разобраться с токено при логировании, когда будет деплой фронта
+// todo 3. Когда делаешь запрос на изменение почты, то нужно сделать проверку на наличие такой почты
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
