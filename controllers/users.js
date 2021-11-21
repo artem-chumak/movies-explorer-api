@@ -75,9 +75,11 @@ const login = async (req, res, next) => {
       NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
       { expiresIn: '7d' },
     );
-    return res.cookie('jwt', token, {
-      maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: 'None', secure: true,
-    }).json({ message: 'Авторизация прошла успешно' });
+    return res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: true }).json({ message: 'Авторизация прошла успешно' });
+    // return res.cookie('jwt', token, {
+    //   maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: 'None', secure: true,
+    // }).json({ message: 'Авторизация прошла успешно' });
+    //! конфигурация для сервера из старого проекта. Нужно будет ее проверить
   } catch (error) {
     if (error.name === 'ValidationError') {
       next(new UnauthorizedUserError('Некорректный логин или пароль'));

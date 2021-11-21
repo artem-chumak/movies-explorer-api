@@ -57,7 +57,7 @@ const deleteMovie = async (req, res, next) => {
     if (!movie) {
       throw new NotFoundError('Кино с таким номером нет');
     }
-    if (movie.owner.toStryng() !== userId) {
+    if (JSON.stringify(movie.owner) !== JSON.stringify(userId)) {
       throw new ForbiddenAccessError('Можно удалять только свои фильмы');
     }
     await Movie.remove(movie);
