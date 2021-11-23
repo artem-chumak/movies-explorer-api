@@ -13,26 +13,24 @@ const getUser = async (req, res, next) => {
     const user = await User.findById(req.user._id);
     if (!user) {
       throw new NotFoundError(errorPhrases.NOT_FOUND_USER);
-    } return res.status(200).send(user);
+    }
+    return res.status(200).send(user);
   } catch (error) {
     if (error.name === 'CastError') {
       next(new BadRequestError(errorPhrases.BAD_REQUEST));
-    } return next(error);
+    }
+    return next(error);
   }
 };
 
 const updateUser = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const prospectEmail = await User.findOne({ email });
+    const prospect = await User.findOne({ email });
     const userId = req.user._id;
-    const prospectId = await User.findOne({ userId });
-    if (prospectEmail) {
-      console.log(prospectId); //!!!
-      console.log(prospectEmail.email); //!!! Тут нужно разобраться с базой данных
+    if (prospect && String(prospect._id) !== userId) {
       throw new ConflictError(errorPhrases.ALREADY_EXIST_USER);
     }
-
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { ...req.body },
@@ -42,12 +40,12 @@ const updateUser = async (req, res, next) => {
     if (!user) {
       throw new NotFoundError(errorPhrases.NOT_EXIST_USER);
     }
-
     return res.status(200).json(user);
   } catch (error) {
     if (error.name === 'ValidationError') {
       next(new BadRequestError(errorPhrases.BAD_REQUEST));
-    } return next(error);
+    }
+    return next(error);
   }
 };
 
@@ -69,7 +67,8 @@ const creatUser = async (req, res, next) => {
   } catch (error) {
     if (error.name === 'ValidationError') {
       next(new BadRequestError(errorPhrases.BAD_REQUEST));
-    } return next(error);
+    }
+    return next(error);
   }
 };
 
@@ -89,7 +88,13 @@ const login = async (req, res, next) => {
       NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
       { expiresIn: '7d' },
     );
-    return res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: true }).json({ message: successPhrases.AUTHORIZED });
+    return res
+      .cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+        sameSite: true,
+      })
+      .json({ message: successPhrases.AUTHORIZED });
     // return res.cookie('jwt', token, {
     //   maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: 'None', secure: true,
     // }).json({ message: 'Авторизация прошла успешно' });
@@ -97,16 +102,24 @@ const login = async (req, res, next) => {
   } catch (error) {
     if (error.name === 'ValidationError') {
       next(new UnauthorizedUserError(errorPhrases.WRONG_CREDENTIALS));
-    } return next(error);
+    }
+    return next(error);
   }
 };
 
 const logout = async (req, res, next) => {
   try {
-    res.cookie('jwt', 'logout', {
-      maxAge: 1, httpOnly: true, sameSite: 'None', sucure: true,
-    }).json({ message: successPhrases.LOGOUT });
-  } catch (error) { next(error); }
+    res
+      .cookie('jwt', 'logout', {
+        maxAge: 1,
+        httpOnly: true,
+        sameSite: 'None',
+        sucure: true,
+      })
+      .json({ message: successPhrases.LOGOUT });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
