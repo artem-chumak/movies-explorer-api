@@ -22,7 +22,7 @@ router.post(
       nameRU: Joi.string().required(),
       nameEN: Joi.string().required(),
       thumbnail: Joi.string().required().pattern(/((http|https):\/\/)?(www\.)?[\w\-~]+(\.[\w\-~]+)+(\/[\w\-~]*)*(#[\w-]*)?(\?.*)?/),
-      movieId: Joi.string().required(),
+      movieId: Joi.number().required(),
     }),
   }),
   addMovie,

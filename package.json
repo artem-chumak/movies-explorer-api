@@ -20,11 +20,6 @@
     "url": "https://github.com/artem-chumak/movies-explorer-api/issues"
   },
   "homepage": "https://github.com/artem-chumak/movies-explorer-api#readme",
-  "devDependencies": {
-    "eslint": "^8.3.0",
-    "eslint-plugin-react": "^7.27.1",
-    "nodemon": "^2.0.15"
-  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",

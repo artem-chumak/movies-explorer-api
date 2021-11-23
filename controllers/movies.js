@@ -1,4 +1,5 @@
 const Movie = require('../models/movie');
+const { errorPhrases } = require('../variables/messages');
 const BadRequestError = require('../errors/BadRequestError'); // 400
 const NotFoundError = require('../errors/NotFoundError'); // 404
 const ForbiddenAccessError = require('../errors/ForbiddenAccessError'); // 403
@@ -45,7 +46,7 @@ const addMovie = async (req, res, next) => {
     return res.status(201).json(movie);
   } catch (error) {
     if (error.name === 'ValidationError') {
-      next(new BadRequestError('Переданы некорректные данные'));
+      next(new BadRequestError(errorPhrases.BAD_REQUEST));
     } return next(error);
   }
 };
@@ -55,16 +56,16 @@ const deleteMovie = async (req, res, next) => {
     const userId = req.user._id;
     const movie = await Movie.findById(req.params.id);
     if (!movie) {
-      throw new NotFoundError('Кино с таким номером нет');
+      throw new NotFoundError(errorPhrases.NOT_FOUND_MOVIE);
     }
-    if (JSON.stringify(movie.owner) !== JSON.stringify(userId)) {
-      throw new ForbiddenAccessError('Можно удалять только свои фильмы');
+    if (String(movie.owner) !== userId) {
+      throw new ForbiddenAccessError(errorPhrases.FORBIDDEN_MOVIE_DELET);
     }
     await Movie.remove(movie);
     return res.status(200).json(movie);
   } catch (error) {
     if (error.name === 'CastError') {
-      next(new BadRequestError('Переданы некорректные данные'));
+      next(new BadRequestError(errorPhrases.BAD_REQUEST));
     } return next(error);
   }
 };

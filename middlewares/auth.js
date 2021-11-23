@@ -1,6 +1,7 @@
 const { NODE_ENV, JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
 const UnauthorizedUserError = require('../errors/UnauthorizedUserError');
+const { errorPhrases } = require('../variables/messages');
 
 module.exports = (req, res, next) => {
   try {
@@ -9,6 +10,6 @@ module.exports = (req, res, next) => {
     req.user = payload;
     return next();
   } catch (error) {
-    throw new UnauthorizedUserError('Нет авторизации');
+    throw new UnauthorizedUserError(errorPhrases.NOT_AUTHORIZED);
   }
 };
