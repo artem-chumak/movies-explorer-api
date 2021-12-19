@@ -1,5 +1,6 @@
 const { Types, Schema, model } = require('mongoose');
 const validator = require('validator');
+const { errorPhrases } = require("../variables/messages");
 
 const movieSchema = new Schema({
   country: {
@@ -26,29 +27,41 @@ const movieSchema = new Schema({
     type: String,
     required: true,
     validate: {
-      validator: (link) => validator.isURL(link, { protocols: ['http', 'https'], require_protocol: true }),
-      message: 'Некорректная ссылка',
+      validator: (link) =>
+        validator.isURL(link, {
+          protocols: ["http", "https"],
+          require_protocol: true,
+        }),
+      message: errorPhrases.NOT_CORRECT_LINK,
     },
   },
   trailer: {
     type: String,
     required: true,
     validate: {
-      validator: (link) => validator.isURL(link, { protocols: ['http', 'https'], require_protocol: true }),
-      message: 'Некорректная ссылка',
+      validator: (link) =>
+        validator.isURL(link, {
+          protocols: ["http", "https"],
+          require_protocol: true,
+        }),
+      message: errorPhrases.NOT_CORRECT_LINK,
     },
   },
   thumbnail: {
     type: String,
     required: true,
     validate: {
-      validator: (link) => validator.isURL(link, { protocols: ['http', 'https'], require_protocol: true }),
-      message: 'Некорректная ссылка',
+      validator: (link) =>
+        validator.isURL(link, {
+          protocols: ["http", "https"],
+          require_protocol: true,
+        }),
+      message: errorPhrases.NOT_CORRECT_LINK,
     },
   },
   owner: {
     type: Types.ObjectId,
-    ref: 'user',
+    ref: "user",
   },
   movieId: {
     type: Number,
